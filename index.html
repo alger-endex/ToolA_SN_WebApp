@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tool A SN 站</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="noSerial" class="banner" hidden>
+  此瀏覽器不支援 Web Serial。請用 <b>Chrome</b> 或 <b>Edge</b> 開啟（直接開檔或執行 start.bat）。
+</div>
+
+<header>
+  <h1>Tool A SN 站</h1>
+  <div class="station">站別 <span id="stationLabel">-</span></div>
+</header>
+
+<main>
+  <section class="conn">
+    <div class="card">
+      <div class="card-h"><span class="dot" id="fxDot"></span>治具 (USB CDC)</div>
+      <div class="card-b">
+        <div id="fxInfo" class="muted">未連接</div>
+        <div id="fxState" class="state">-</div>
+      </div>
+      <div class="card-f">
+        <button id="fxConnect">連接治具</button>
+        <button id="fxDisconnect" class="ghost">中斷</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-h"><span class="dot" id="scDot"></span>掃描器</div>
+      <div class="card-b">
+        <div id="scInfo" class="muted">未連接 COM（鍵盤模式也可直接掃描）</div>
+      </div>
+      <div class="card-f">
+        <button id="scConnect">連接掃描器 (COM)</button>
+        <button id="scDisconnect" class="ghost">中斷</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-h"><span class="dot" id="phDot"></span>手機掃描 (BLE)</div>
+      <div class="card-b">
+        <div id="phInfo" class="muted">未連線（手機開啟 ToolA 掃描 App）</div>
+      </div>
+      <div class="card-f">
+        <button id="phConnect">連接手機</button>
+        <button id="phDisconnect" class="ghost">中斷</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="work">
+    <div class="sn-box">
+      <div class="label">目前 SN</div>
+      <div id="curSN" class="sn">請掃描 QR code</div>
+      <div id="curExtra" class="muted"></div>
+      <div id="msg" class="msg">-</div>
+      <form id="manualForm" class="manual">
+        <input id="manualInput" autocomplete="off" placeholder="鍵盤模式掃描 / 手動輸入 SN 後按 Enter">
+        <button type="submit">送出</button>
+      </form>
+    </div>
+    <div id="result" class="result idle">
+      <div id="resCode" class="res-code">—</div>
+      <div id="resDesc" class="res-desc">等待測試結果</div>
+      <div id="resSN" class="res-sn"></div>
+    </div>
+  </section>
+
+  <section class="stats">
+    <div>今日 PASS <b id="stPass">0</b></div>
+    <div>今日 FAIL <b id="stFail">0</b></div>
+    <div>總筆數 <b id="stTotal">0</b></div>
+    <div class="spacer"></div>
+    <button id="fileBtn" class="ghost">選擇 CSV 紀錄檔</button>
+    <span id="fileInfo" class="muted">未設定（只存在瀏覽器）</span>
+    <button id="exportBtn" class="ghost">匯出 CSV</button>
+  </section>
+
+  <section class="records">
+    <table>
+      <thead><tr><th>時間</th><th>治具 SN</th><th>結果</th><th>說明</th><th>掃描 SN</th></tr></thead>
+      <tbody id="recBody"></tbody>
+    </table>
+  </section>
+
+  <details class="panel">
+    <summary>設定</summary>
+    <div class="settings">
+      <label>站別名稱 <input id="setStation" placeholder="例如 L1-A"></label>
+      <label>SN 規則 (正規表示式，可空白) <input id="setRegex" placeholder="例如 ^EBK2611"></label>
+      <label class="chk"><input type="checkbox" id="setAllow5"> 允許只掃 5 碼流水號（前 11 字沿用 config）</label>
+      <label class="chk"><input type="checkbox" id="setDup"> 阻擋已 PASS 的重複 SN（需確認才送出）</label>
+      <div class="row">
+        <button id="clearBtn" class="danger">清除瀏覽器內紀錄</button>
+      </div>
+    </div>
+  </details>
+
+  <details class="panel">
+    <summary>通訊紀錄</summary>
+    <pre id="log" class="log"></pre>
+  </details>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>
